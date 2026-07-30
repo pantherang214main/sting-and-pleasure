@@ -65,12 +65,13 @@ export function Header() {
                 key={l.code}
                 onClick={() => setLang(l.code)}
                 style={{
-                  background: lang === l.code ? 'var(--accent)' : 'transparent',
-                  color: lang === l.code ? 'white' : 'var(--text-secondary)',
-                  border: '1px solid var(--border)',
-                  padding: '0.2rem 0.5rem',
+                  background: lang === l.code ? '#8B1E1E' : 'transparent',
+                  color: lang === l.code ? '#ffffff' : '#A1A1A1',
+                  border: '1px solid #2A2A2A',
+                  padding: '0.2rem 0.55rem',
                   borderRadius: '4px',
-                  fontSize: '0.75rem'
+                  fontSize: '0.75rem',
+                  cursor: 'pointer'
                 }}
               >
                 {l.code === 'zh' ? '繁中' : l.code === 'sc' ? '简体' : l.code === 'en' ? 'EN' : '日本語'}
@@ -130,13 +131,14 @@ export function Header() {
                 key={l.code}
                 onClick={() => setLang(l.code)}
                 style={{
-                  background: lang === l.code ? 'var(--accent)' : 'transparent',
-                  color: lang === l.code ? 'white' : 'var(--text-secondary)',
-                  border: '1px solid var(--border)',
-                  padding: '0.3rem 0.7rem',
-                  borderRadius: '4px',
-                  fontSize: '0.85rem'
-                }}
+                background: lang === l.code ? '#8B1E1E' : 'transparent',
+                color: lang === l.code ? '#ffffff' : '#A1A1A1',
+                border: '1px solid #2A2A2A',
+                padding: '0.2rem 0.55rem',
+                borderRadius: '4px',
+                fontSize: '0.75rem',
+                cursor: 'pointer'
+              }}
               >
                 {l.code === 'zh' ? '繁中' : l.code === 'sc' ? '简体' : l.code === 'en' ? 'EN' : '日本語'}
               </button>
