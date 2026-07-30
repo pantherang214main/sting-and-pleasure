@@ -73,7 +73,7 @@ export function Header() {
                   fontSize: '0.75rem'
                 }}
               >
-                {l.code === 'zh' ? '繁中' : l.code === 'en' ? 'EN' : '日本語'}
+                {l.code === 'zh' ? '繁中' : l.code === 'sc' ? '简体' : l.code === 'en' ? 'EN' : '日本語'}
               </button>
             ))}
           </div>
@@ -138,7 +138,7 @@ export function Header() {
                   fontSize: '0.85rem'
                 }}
               >
-                {l.code === 'zh' ? '繁中' : l.code === 'en' ? 'EN' : '日本語'}
+                {l.code === 'zh' ? '繁中' : l.code === 'sc' ? '简体' : l.code === 'en' ? 'EN' : '日本語'}
               </button>
             ))}
           </div>
