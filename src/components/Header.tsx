@@ -1,28 +1,18 @@
 import { useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { useI18n, LANGS } from '@/lib/i18n'
 
-type Page = 'home' | 'articles' | 'safety' | 'about'
-
-type Props = {
-  currentPage: Page
-  onNavigate: (page: Page) => void
-}
-
-export function Header({ currentPage, onNavigate }: Props) {
+export function Header() {
   const { t, lang, setLang } = useI18n()
   const [menuOpen, setMenuOpen] = useState(false)
+  const location = useLocation()
 
-  const navItems: { key: Page; label: string }[] = [
-    { key: 'home', label: t('navHome') },
-    { key: 'articles', label: t('navArticles') },
-    { key: 'safety', label: t('navSafety') },
-    { key: 'about', label: t('navAbout') },
+  const navItems = [
+    { path: '/', label: t('navHome') },
+    { path: '/articles', label: t('navArticles') },
+    { path: '/safety', label: t('navSafety') },
+    { path: '/about', label: t('navAbout') },
   ]
-
-  const handleNav = (page: Page) => {
-    onNavigate(page)
-    setMenuOpen(false)
-  }
 
   return (
     <header style={{
@@ -41,13 +31,12 @@ export function Header({ currentPage, onNavigate }: Props) {
         maxWidth: '900px',
         margin: '0 auto'
       }}>
-        {/* Logo */}
-        <div 
-          style={{ fontWeight: 600, fontSize: '1.05rem', cursor: 'pointer' }}
-          onClick={() => handleNav('home')}
+        <Link 
+          to="/"
+          style={{ fontWeight: 600, fontSize: '1.05rem', textDecoration: 'none', color: 'inherit' }}
         >
           {t('brand')}
-        </div>
+        </Link>
 
         {/* Desktop Nav */}
         <nav className="desktop-nav" style={{ 
@@ -56,21 +45,18 @@ export function Header({ currentPage, onNavigate }: Props) {
           alignItems: 'center' 
         }}>
           {navItems.map((item) => (
-            <button
-              key={item.key}
-              onClick={() => handleNav(item.key)}
+            <Link
+              key={item.path}
+              to={item.path}
               style={{
-                background: 'none',
-                border: 'none',
-                color: currentPage === item.key ? 'var(--text)' : 'var(--text-secondary)',
+                color: location.pathname === item.path ? 'var(--text)' : 'var(--text-secondary)',
                 fontSize: '0.9rem',
-                cursor: 'pointer',
-                padding: 0,
-                fontWeight: currentPage === item.key ? 500 : 400
+                textDecoration: 'none',
+                fontWeight: location.pathname === item.path ? 500 : 400
               }}
             >
               {item.label}
-            </button>
+            </Link>
           ))}
 
           <div style={{ display: 'flex', gap: '0.35rem', marginLeft: '0.5rem' }}>
@@ -122,22 +108,20 @@ export function Header({ currentPage, onNavigate }: Props) {
           gap: '0.75rem'
         }}>
           {navItems.map((item) => (
-            <button
-              key={item.key}
-              onClick={() => handleNav(item.key)}
+            <Link
+              key={item.path}
+              to={item.path}
+              onClick={() => setMenuOpen(false)}
               style={{
-                background: 'none',
-                border: 'none',
-                color: currentPage === item.key ? 'var(--text)' : 'var(--text-secondary)',
+                color: location.pathname === item.path ? 'var(--text)' : 'var(--text-secondary)',
                 fontSize: '1rem',
-                cursor: 'pointer',
-                textAlign: 'left',
+                textDecoration: 'none',
                 padding: '0.4rem 0',
-                fontWeight: currentPage === item.key ? 500 : 400
+                fontWeight: location.pathname === item.path ? 500 : 400
               }}
             >
               {item.label}
-            </button>
+            </Link>
           ))}
 
           <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
@@ -161,7 +145,6 @@ export function Header({ currentPage, onNavigate }: Props) {
         </div>
       )}
 
-      {/* 簡單的 RWD 控制 */}
       <style>{`
         @media (max-width: 768px) {
           .desktop-nav { display: none !important; }

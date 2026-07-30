@@ -1,11 +1,8 @@
+import { Link } from 'react-router-dom'
 import { useI18n } from '@/lib/i18n'
 import { articles } from '@/content/articles'
 
-type Props = {
-  onSelectArticle: (slug: string) => void
-}
-
-export function Articles({ onSelectArticle }: Props) {
+export function Articles() {
   const { t, lang } = useI18n()
 
   return (
@@ -27,17 +24,18 @@ export function Articles({ onSelectArticle }: Props) {
 
       <div style={{ display: 'grid', gap: '1rem' }}>
         {articles.map((article) => (
-          <button
+          <Link
             key={article.slug}
-            onClick={() => onSelectArticle(article.slug)}
+            to={`/articles/${article.slug}`}
             style={{
               textAlign: 'left',
               background: 'var(--card)',
               border: '1px solid var(--border)',
               borderRadius: '10px',
               padding: '1.25rem 1.5rem',
-              cursor: 'pointer',
-              color: 'inherit'
+              textDecoration: 'none',
+              color: 'inherit',
+              display: 'block'
             }}
           >
             <div style={{ 
@@ -61,7 +59,7 @@ export function Articles({ onSelectArticle }: Props) {
             <div style={{ fontSize: '0.8rem', color: '#666' }}>
               {article.date} · {article.minutes} {t('minRead')}
             </div>
-          </button>
+          </Link>
         ))}
       </div>
     </div>

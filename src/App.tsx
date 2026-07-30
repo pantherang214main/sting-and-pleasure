@@ -1,22 +1,18 @@
 import { useState, useEffect } from 'react'
-import { I18nProvider } from '@/lib/i18n'
+import { Routes, Route, useNavigate, useParams } from 'react-router-dom'
+import { I18nProvider, useI18n } from '@/lib/i18n'
 import { AgeGate } from '@/components/AgeGate'
 import { Header } from '@/components/Header'
 import { Home } from '@/components/Home'
 import { Safety } from '@/components/Safety'
 import { Articles } from '@/components/Articles'
-import { getArticle } from '@/content/articles'
 import { About } from '@/components/About'
 import { Footer } from '@/components/Footer'
-import { useI18n } from '@/lib/i18n'
+import { getArticle } from '@/content/articles'
 import './App.css'
-
-type Page = 'home' | 'articles' | 'safety' | 'about' | 'article'
 
 function App() {
   const [verified, setVerified] = useState<boolean | null>(null)
-  const [page, setPage] = useState<Page>('home')
-  const [currentSlug, setCurrentSlug] = useState<string | null>(null)
 
   useEffect(() => {
     const ok = localStorage.getItem('sp-age-verified')
@@ -26,16 +22,6 @@ function App() {
   const handleEnter = () => {
     localStorage.setItem('sp-age-verified', 'true')
     setVerified(true)
-  }
-
-  const handleSelectArticle = (slug: string) => {
-    setCurrentSlug(slug)
-    setPage('article')
-  }
-
-  const handleBackToArticles = () => {
-    setCurrentSlug(null)
-    setPage('articles')
   }
 
   if (verified === null) {
@@ -48,63 +34,39 @@ function App() {
         <AgeGate onEnter={handleEnter} />
       ) : (
         <div className="app">
-          <Header 
-            currentPage={page === 'article' ? 'articles' : page} 
-            onNavigate={(p) => {
-              setPage(p)
-              setCurrentSlug(null)
-            }} 
-          />
-             <main style={{ padding: '0 1.5rem 4rem', maxWidth: '900px', margin: '0 auto' }}>
-              {page === 'home' && <Home />}
-              {page === 'articles' && <Articles onSelectArticle={handleSelectArticle} />}
-              {page === 'safety' && <Safety />}
-              {page === 'about' && <About />}
-              {page === 'article' && currentSlug && (
-                <ArticleDetail slug={currentSlug} onBack={handleBackToArticles} />
-              )}
-            </main>
-            <div className="app">
-              <Header 
-                currentPage={page === 'article' ? 'articles' : page} 
-                onNavigate={(p) => {
-                  setPage(p)
-                  setCurrentSlug(null)
-                }} 
-              />
-              <main style={{ padding: '0 1.5rem 4rem', maxWidth: '900px', margin: '0 auto' }}>
-                {page === 'home' && <Home />}
-                {page === 'articles' && <Articles onSelectArticle={handleSelectArticle} />}
-                {page === 'safety' && <Safety />}
-                {page === 'about' && <About />}
-                {page === 'article' && currentSlug && (
-                  <ArticleDetail slug={currentSlug} onBack={handleBackToArticles} />
-                )}
-              </main>
-              <Footer />
-            </div>
+          <Header />
+          <main style={{ padding: '0 1.5rem 4rem', maxWidth: '900px', margin: '0 auto' }}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/articles" element={<Articles />} />
+              <Route path="/articles/:slug" element={<ArticleDetail />} />
+              <Route path="/safety" element={<Safety />} />
+              <Route path="/about" element={<About />} />
+            </Routes>
+          </main>
+          <Footer />
         </div>
       )}
     </I18nProvider>
   )
 }
 
-// 暫時把單一文章顯示寫在同一個檔案，之後再拆
-function ArticleDetail({ slug, onBack }: { slug: string; onBack: () => void }) {
+function ArticleDetail() {
+  const { slug } = useParams()
+  const navigate = useNavigate()
   const { t, lang } = useI18n()
-  const article = getArticle(slug)
+  const article = getArticle(slug || '')
 
   if (!article) {
     return <div style={{ padding: '3rem 0' }}>找不到文章</div>
   }
 
-  // 簡單把 markdown 風格的內容轉成段落
   const paragraphs = article.body[lang].split('\n').filter(Boolean)
 
   return (
     <div style={{ padding: '3rem 0' }}>
       <button 
-        onClick={onBack}
+        onClick={() => navigate('/articles')}
         style={{
           background: 'none',
           border: 'none',
