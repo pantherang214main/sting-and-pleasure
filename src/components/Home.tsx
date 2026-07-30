@@ -1,9 +1,9 @@
+import { Link } from 'react-router-dom'
 import { useI18n } from '@/lib/i18n'
 import { articles } from '@/content/articles'
 
 export function Home() {
   const { t, lang } = useI18n()
-
   const latest = articles.slice(0, 3)
 
   return (
@@ -78,19 +78,29 @@ export function Home() {
           marginBottom: '1.5rem'
         }}>
           <h2 style={{ fontSize: '1.4rem' }}>{t('latestTitle')}</h2>
-          <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+          <Link 
+            to="/articles" 
+            style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', textDecoration: 'none' }}
+          >
             {t('viewAll')} →
-          </span>
+          </Link>
         </div>
 
         <div style={{ display: 'grid', gap: '1rem' }}>
           {latest.map((article) => (
-            <div key={article.slug} style={{
-              background: 'var(--card)',
-              border: '1px solid var(--border)',
-              borderRadius: '10px',
-              padding: '1.25rem 1.5rem'
-            }}>
+            <Link
+              key={article.slug}
+              to={`/articles/${article.slug}`}
+              style={{
+                background: 'var(--card)',
+                border: '1px solid var(--border)',
+                borderRadius: '10px',
+                padding: '1.25rem 1.5rem',
+                textDecoration: 'none',
+                color: 'inherit',
+                display: 'block'
+              }}
+            >
               <div style={{ 
                 fontSize: '0.8rem', 
                 color: 'var(--warm)', 
@@ -112,7 +122,7 @@ export function Home() {
               <div style={{ fontSize: '0.8rem', color: '#666' }}>
                 {article.date} · {article.minutes} {t('minRead')}
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
